@@ -1,5 +1,29 @@
 #! /usr/bin/perl
 
+# This script is intended to filter the output of 
+# "pilight-receive" (see http://www.pilight.org/ for details)
+# to execute some actions based on received input.
+# 
+# The configuration in this script reacts on received buttons
+# of a elro sender (http://www.elro.eu/de/produkte/cat/home-automation/heimautomation/sender1/fernbedienung1)
+# to controls mpd (http://www.musicpd.org/)
+# Button A off -> stop
+# Button B on  -> start
+# Button B off -> stop
+# Button C on  -> previous track
+# Button C off -> next track
+# Button D on  -> reduce volume
+# Button D off -> increase volume
+
+# Usage: 
+# unbuffer pilight-receive | ./pilight-receive-filter.pl
+#
+# Please note the "unbuffer" before the pilight-receive command.
+# Without the "unbuffer" data will not be passed to the pilpilight-receive 
+# until pilight-receive filled the pipe buffer. So it might take long time
+# until a reaction is detected.
+#
+# The "unbuffer" is available in "expect shell" (http://expect.sourceforge.net/#examples)
 
 use strict;
 use Data::Dumper;
