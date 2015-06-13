@@ -6,7 +6,7 @@
 # 
 # The configuration in this script reacts on received buttons
 # of a elro sender (http://www.elro.eu/de/produkte/cat/home-automation/heimautomation/sender1/fernbedienung1)
-# to controls mpd (http://www.musicpd.org/)
+# to control mpd (http://www.musicpd.org/)
 # Button A off -> stop
 # Button B on  -> start
 # Button B off -> stop
