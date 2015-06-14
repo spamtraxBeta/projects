@@ -17,6 +17,7 @@ namespace MaEr
      * Based on: http://stackoverflow.com/questions/3589936/c-urlencode-library-unicode-capable
      */
     std::string UrlEncode(const std::string & url);
+    std::wstring UrlEncode(const std::wstring & url);
 
 } /* namespace MaEr */
 

@@ -73,6 +73,8 @@ int main(int ac, char * av[])
     }
 
     cout<<MaEr::UrlEncode(input);
+    //wcout<<MaEr::UrlEncode(L"Hello");
 
     return 0;
 }
+
