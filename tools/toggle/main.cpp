@@ -1,7 +1,7 @@
 /**
 * Writes 0 and 1 to stdout based on a pattern
 * Copyright  2015
-* Martin Ertl (ertl.martin@gmx.de)
+* Martin Ertl (spamtraxBeta@abwesend.de)
 *
 * This file is part of "tools".
 *
