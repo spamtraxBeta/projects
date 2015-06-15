@@ -5,7 +5,7 @@
  *      Author: martin
  */
 
-#include "UrlEncode.hpp"
+#include "urlencode.hpp"
 
 #include <boost/function_output_iterator.hpp>
 #include <boost/bind.hpp>

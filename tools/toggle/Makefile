@@ -55,27 +55,27 @@
 
 ## Customizable Section: adapt those variables to suit your program.
 ##==========================================================================
+
 include ../libMaEr/libMaEr.mak
 
 # The pre-processor options used by the cpp (man cpp for more).
 CPPFLAGS += -Wall -I${LIBMAER_DIR}
 
 # The options used in linking as well as in any direct use of ld.
-LDFLAGS += 
+LDFLAGS +=
 
-MY_LIBS += -lboost_program_options
-
+MY_LIBS += -lboost_program_options -lboost_system -lboost_regex
 
 # The directories in which source files reside.
 # If not specified, only the current directory will be serached.
 
 # Get all subdirectories except ".svn" directories
-SRCDIRS = $(shell find ${mkfile_path} -type f -exec dirname {} \; | grep -v '.svn' | sort | uniq) ${LIBMAER_DIR}/MaEr/urlencode
+SRCDIRS = $(shell find ${mkfile_path} -type f -exec dirname {} \; | grep -v '.svn' | sort -u) ${LIBMAER_DIR}/MaEr/toggle
 
 
 # The executable file name.
 # If not specified, current directory name or `a.out' will be used.
-PROGRAM   = urlencode
+PROGRAM   = toggle
 
 
 
