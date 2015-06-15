@@ -35,13 +35,20 @@
 #include <string>
 #include <list>
 
+
 namespace MaEr
 {
 
+/**
+ * @brief The CToggle class provides a timer based toggle functionality
+ */
 class CToggle
 {
 public:
 
+    /**
+     * @brief The tenLevel enum defines the state (low or high)
+     */
     enum tenLevel
     {
         nenLevel_lo,
@@ -51,11 +58,25 @@ public:
     typedef boost::signals2::signal<void (tenLevel, int)> sig_t;
 
 
+    /**
+     * @brief CToggle
+     * @param io_service: the signal 'toggle' will be sent from within this io_service
+     */
     CToggle(boost::asio::io_service & io_service);
     virtual ~CToggle();
 
-    void add(unsigned int timeBaseMs, const std::string & input);
+    /**
+     * @brief add adds a new pattern
+     * @param timeBaseMs: time base in milliseconds
+     * @param pattern: the toggle pattern
+     *      example1: -_- sends 'toggle' signal high, low, high; each transition lasts timeBaseMs milliseconds
+     *      example1: -3_2- sends 'toggle' signal high: 3 times timeBaseMs, low: 2 times timeBaseMs, high
+     */
+    void add(unsigned int timeBaseMs, const std::string & pattern);
 
+    /**
+     * @brief toggle signal
+     */
     sig_t toggle;
 
 private:
@@ -75,7 +96,7 @@ private:
     static const char loChar = '_';
 
     std::string parse(std::string input);
-	void append(std::string & dst, int count, tenLevel level);
+    void append(std::string & dst, int count, tenLevel level);
 
     struct timeStruct
     {

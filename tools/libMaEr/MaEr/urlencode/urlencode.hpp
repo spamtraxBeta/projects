@@ -26,12 +26,20 @@
 
 namespace MaEr
 {
+    /**
+     * @brief UrlEncode url encodes a string as described here:
+     * http://stackoverflow.com/questions/3589936/c-urlencode-library-unicode-capable
+     * @param text: text to be encoded
+     * @return url encoded text
+     */
+    std::string UrlEncode(const std::string & text);
 
     /**
-     * Based on: http://stackoverflow.com/questions/3589936/c-urlencode-library-unicode-capable
+     * @brief UrlEncode - same as above but taking unicode strings
+     * @param text
+     * @return
      */
-    std::string UrlEncode(const std::string & url);
-    std::wstring UrlEncode(const std::wstring & url);
+    std::wstring UrlEncode(const std::wstring & text);
 
 } /* namespace MaEr */
 
