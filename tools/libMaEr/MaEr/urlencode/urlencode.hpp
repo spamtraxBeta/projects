@@ -27,19 +27,17 @@
 namespace MaEr
 {
     /**
-     * @brief UrlEncode url encodes a string as described here:
+     * @brief UrlEncode url encodes a string, based on
      * http://stackoverflow.com/questions/3589936/c-urlencode-library-unicode-capable
      * @param text: text to be encoded
      * @return url encoded text
      */
     std::string UrlEncode(const std::string & text);
 
-    /**
-     * @brief UrlEncode - same as above but taking unicode strings
-     * @param text
-     * @return
-     */
-    std::wstring UrlEncode(const std::wstring & text);
+    // for std::wstring url encoding see:
+    // using Qt or libICU: http://stackoverflow.com/questions/3300025/how-do-i-html-url-encode-a-stdwstring-containing-unicode-characters
+    // using libIcov: http://stackoverflow.com/questions/7210389/how-to-make-my-stdstring-url-encode-wstringconst-stdwstring-input-work
+
 
 } /* namespace MaEr */
 

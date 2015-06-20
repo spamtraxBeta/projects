@@ -19,16 +19,5 @@ BOOST_AUTO_TEST_CASE(urlencode_noUnicode)
     BOOST_CHECK_EQUAL(MaEr::UrlEncode(""), "");
 }
 
-BOOST_AUTO_TEST_CASE(urlencode_unicode)
-{
-    BOOST_REQUIRE(MaEr::UrlEncode(L"ä") == L"%C3%A4");
-    BOOST_REQUIRE(MaEr::UrlEncode(L"ö") == L"%C3%B6");
-    BOOST_REQUIRE(MaEr::UrlEncode(L"ü") == L"%C3%BC");
-    BOOST_REQUIRE(MaEr::UrlEncode(L"Ä") == L"%C3%84");
-    BOOST_REQUIRE(MaEr::UrlEncode(L"Ö") == L"%C3%96");
-    BOOST_REQUIRE(MaEr::UrlEncode(L"Ü") == L"%C3%9C");
-    BOOST_REQUIRE(MaEr::UrlEncode(L"ß") == L"%C3%9F");
-    BOOST_REQUIRE(MaEr::UrlEncode(L"&") == L"%26");
 
-}
 
