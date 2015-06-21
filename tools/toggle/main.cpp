@@ -29,7 +29,7 @@ using namespace std;
 namespace po = boost::program_options;
 
 
-void onToggle(MaEr::CToggle::tenLevel level, int duration)
+void onToggle(MaEr::CToggle::tenLevel level, int /*duration*/)
 {
     if (level == MaEr::CToggle::nenLevel_hi)
     {
