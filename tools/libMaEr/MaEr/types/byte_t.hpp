@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <iostream>
 #include <ostream>
+#include <boost/program_options.hpp>
 
 namespace MaEr
 {
@@ -33,9 +34,9 @@ class byte_t
 {
 public:
 
-    byte_t() :
-        m_value(0)
-    {}
+//    byte_t() :
+//        m_value(0)
+//    {}
 
     byte_t(const uint8_t & arg) :
         m_value(arg)
@@ -49,16 +50,32 @@ public:
     {
         return m_value;
     }
-    operator uint8_t() const { return m_value; }
 
-    friend std::istream & operator>>(std::istream & in, byte_t & valArg);
+    void setValue(uint8_t value)
+    {
+        m_value = value;
+    }
 
-    friend std::ostream & operator<<(std::ostream & out, const byte_t & valArg);
+    operator uint8_t() const
+    { return m_value; }
+
+
 
 private:
     uint8_t m_value;
 
 };
+
+/**
+ * @brief operator >> read a string from this stream and interpret as integer value or if its
+ * length is exactly 8 and containint just 0 and 1 => interpret as binary value
+ * @param in
+ * @param valArg
+ * @return
+ */
+std::istream & operator>>(std::istream & in, byte_t & valArg);
+
+std::ostream & operator<<(std::ostream & out, const byte_t & valArg);
 
 } // end namespace MaEr
 

@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(toggle)
         int duration = 10;
         toggle.add(duration, "____-2_5--2-");
         const ToggleReceiver::list_t & result = toggleReceiver.result();
-        BOOST_REQUIRE_EQUAL(result.size(), 3);
+        BOOST_REQUIRE_EQUAL(result.size(), 4);
         BOOST_REQUIRE_EQUAL(result.at(0), ToggleReceiver::toggleResult(MaEr::CToggle::nenLevel_lo, duration * 4));
         BOOST_REQUIRE_EQUAL(result.at(1), ToggleReceiver::toggleResult(MaEr::CToggle::nenLevel_hi, duration * 2));
         BOOST_REQUIRE_EQUAL(result.at(2), ToggleReceiver::toggleResult(MaEr::CToggle::nenLevel_lo, duration * 5));
