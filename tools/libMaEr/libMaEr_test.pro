@@ -29,7 +29,8 @@ include(../deployment.pri)
 qtcAddDeployment()
 
 SOURCES += \
-    testcases/urlencode/test_urlencode.cpp
+    testcases/urlencode/test_urlencode.cpp \
+    testcases/toggle/test_toggle.cpp
 
 
 
