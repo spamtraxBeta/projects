@@ -9,7 +9,8 @@ include(libMaEr.pri)
 
 
 LIBS += \
-    -lboost_unit_test_framework
+    -lboost_unit_test_framework \
+    -lboost_program_options
 
 
 CONFIG(debug, debug|release){
@@ -25,12 +26,17 @@ CONFIG(release, debug|release){
 }
 
 
+
 include(../deployment.pri)
 qtcAddDeployment()
 
 SOURCES += \
     testcases/urlencode/test_urlencode.cpp \
-    testcases/toggle/test_toggle.cpp
+    testcases/toggle/test_toggle.cpp \
+    testcases/types/test_types.cpp \
+    testcases/testcase_main.cpp
+
+HEADERS +=
 
 
 

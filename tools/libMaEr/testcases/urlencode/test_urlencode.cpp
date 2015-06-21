@@ -1,12 +1,10 @@
 
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE urlencode
 #include <boost/test/unit_test.hpp>
 #include <MaEr/urlencode/urlencode.hpp>
 
 #include <iostream>
 
-BOOST_AUTO_TEST_CASE(urlencode_noUnicode)
+BOOST_AUTO_TEST_CASE(urlencode)
 {
     BOOST_CHECK_EQUAL(MaEr::UrlEncode("ä"), "%C3%A4");
     BOOST_CHECK_EQUAL(MaEr::UrlEncode("ö"), "%C3%B6");

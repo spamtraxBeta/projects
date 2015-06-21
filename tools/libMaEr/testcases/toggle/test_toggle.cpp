@@ -1,10 +1,12 @@
 //#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE toggle
+//#define BOOST_TEST_MODULE toggle
 #include <boost/test/unit_test.hpp>
 #include <MaEr/toggle/toggle.hpp>
 
 #include <iostream>
 #include <deque>
+
+BOOST_AUTO_TEST_SUITE(toggle)
 
 class ToggleReceiver
 {
@@ -76,7 +78,7 @@ std::ostream& operator<<(std::ostream& os, const ToggleReceiver::toggleResult & 
     return os;
 }
 
-BOOST_AUTO_TEST_CASE(urlencode_toggle)
+BOOST_AUTO_TEST_CASE(toggle)
 {
 
     boost::asio::io_service ioService;
@@ -120,7 +122,7 @@ BOOST_AUTO_TEST_CASE(urlencode_toggle)
         int duration = 10;
         toggle.add(duration, "____-2_5--2-");
         const ToggleReceiver::list_t & result = toggleReceiver.result();
-        BOOST_REQUIRE_EQUAL(result.size(), 4);
+        BOOST_REQUIRE_EQUAL(result.size(), 3);
         BOOST_REQUIRE_EQUAL(result.at(0), ToggleReceiver::toggleResult(MaEr::CToggle::nenLevel_lo, duration * 4));
         BOOST_REQUIRE_EQUAL(result.at(1), ToggleReceiver::toggleResult(MaEr::CToggle::nenLevel_hi, duration * 2));
         BOOST_REQUIRE_EQUAL(result.at(2), ToggleReceiver::toggleResult(MaEr::CToggle::nenLevel_lo, duration * 5));
@@ -130,5 +132,7 @@ BOOST_AUTO_TEST_CASE(urlencode_toggle)
 
 
 }
+
+BOOST_AUTO_TEST_SUITE_END() // toggle
 
 
