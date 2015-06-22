@@ -3,14 +3,12 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-include(libMaEr.pri)
-
-
-
-
 LIBS += \
     -lboost_unit_test_framework \
     -lboost_program_options
+
+include(libMaEr.pri)
+
 
 
 CONFIG(debug, debug|release){
@@ -34,7 +32,8 @@ SOURCES += \
     testcases/urlencode/test_urlencode.cpp \
     testcases/toggle/test_toggle.cpp \
     testcases/types/test_types.cpp \
-    testcases/testcase_main.cpp
+    testcases/testcase_main.cpp \
+    testcases/log/test_log.cpp
 
 HEADERS +=
 
