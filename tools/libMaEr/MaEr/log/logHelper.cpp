@@ -45,39 +45,6 @@ namespace keywords = boost::log::keywords;
 namespace MaEr
 {
 
-bool LogHelper::m_alreadyInitialized = false;
-
-LogHelper & LogHelper::instance()
-{
-    static LogHelper obj;
-    return obj;
-}
-
-LogHelper::LogHelper():
-    m_deInit(false)
-{
-    if (m_alreadyInitialized == false)
-    {
-        init();
-        m_deInit = true;
-        m_alreadyInitialized = true;
-    }
-    else
-    {
-        throw std::runtime_error("Cannot create more than one instance of type 'LogHelper'");
-    }
-}
-
-LogHelper::~LogHelper()
-{
-    if (m_deInit == true)
-    {
-        deinit();
-        m_alreadyInitialized = false;
-    }
-}
-
-
 void LogHelper::init()
 {
 
@@ -166,7 +133,7 @@ void LogHelper::addFileLogger
         //<< "] <" << expr::attr< severity_level >("Severity")
         //<< "> " << expr::message
 
-        expr::format("<log id=\"%1%\" severity=\"%2%\" timestamp=\"%3%\" %4%>%5%</log>")
+        expr::format("<log id=\"%1%\" severity=\"%2%\" timestamp=\"%3%\" callStack=\"%4%\">%5%</log>")
         % expr::attr< unsigned int >("RecordID")                                // %1
         % expr::attr< SeverityLevel >("Severity")                               // %2
         % expr::attr< boost::posix_time::ptime >("TimeStamp")                   // %3
@@ -181,30 +148,7 @@ void LogHelper::addFileLogger
     core->add_thread_attribute("Scope", attrs::named_scope());
     core->add_sink(sink);
 
-#if 0
-    // One can also use lambda expressions to setup filters and formatters
-    logging::add_file_log
-        (
-        fileName,
-        keywords::filter = expr::attr< severity_level >("Severity") >= trace,
-        keywords::format = expr::stream
-            << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
-            << " [" << expr::format_date_time< attrs::timer::value_type >("Uptime", "%O:%M:%S")
-            << "] [" << expr::format_named_scope("Scope", keywords::format = "%n (%f:%l)")
-            //<< "] [" << expr::format_named_scope("Scope", keywords::format = "%n ")
-            << "] <" << expr::attr< severity_level >("Severity")
-            << "> " << expr::message
-        /*
-        keywords::format = expr::format("%1% [%2%] [%3%] <%4%> %5%")
-        % expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
-        % expr::format_date_time< attrs::timer::value_type >("Uptime", "%O:%M:%S")
-        % expr::format_named_scope("Scope", keywords::format = "%n (%f:%l)")
-        % expr::attr< severity_level >("Severity")
-        % expr::message
-        */
-        );
 
-#endif 
 }
 
 } // end namespace MaEr

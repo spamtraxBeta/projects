@@ -24,28 +24,28 @@
 #include <boost/log/attributes/timer.hpp>
 #include <boost/log/sources/logger.hpp>
 
-#define DECLARE_LOGGER() \
+#define logDeclaration() \
     BOOST_LOG_FUNCTION(); \
     boost::log::sources::severity_logger< MaEr::LogHelper::SeverityLevel > sevLogger01; \
     sevLogger01.add_attribute("Uptime", boost::log::attributes::timer());
 
 #define logTrace()\
-    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::trace)
+    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::trace)<<"["<<__LINE__<<"]\t"
 
 #define logDebug()\
-    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::debug)
+    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::debug)<<"["<<__LINE__<<"]\t"
 
 #define logInfo()\
-    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::info)
+    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::info)<<"["<<__LINE__<<"]\t"
 
 #define logWarning()\
-    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::warning)
+    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::warning)<<"["<<__LINE__<<"]\t"
 
 #define logError()\
-    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::error)
+    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::error)<<"["<<__LINE__<<"]\t"
 
 #define logFatal()\
-    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::fatal)
+    BOOST_LOG_SEV(sevLogger01, MaEr::LogHelper::fatal)<<"["<<__LINE__<<"]\t"
 
 namespace MaEr
 {
@@ -62,10 +62,10 @@ namespace MaEr
             fatal
         };
 
-        static LogHelper & instance();
 
-
-        void addFileLogger
+        static void init();
+        static void deinit();
+        static void addFileLogger
         (
             const std::string & fileName,
             const std::string & logDirectory = "log",
@@ -76,18 +76,9 @@ namespace MaEr
 
 
     private:
-        static bool m_alreadyInitialized;
-
-        bool m_deInit;
-
         LogHelper();
-        ~LogHelper();
-
         LogHelper(const LogHelper & rhs);
         LogHelper & operator=(const LogHelper & rhs);
-
-        void init();
-        void deinit();
     };
 
 
