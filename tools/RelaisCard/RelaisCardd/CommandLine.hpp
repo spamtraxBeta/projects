@@ -25,21 +25,49 @@
 
 #include <MaEr/types/byte_t.hpp>
 
+/**
+ * @brief The CommandLine class parses command line arguments
+ * and provides the settings with getter functions
+ */
 class CommandLine : boost::noncopyable
 {
 public:
 
+    /**
+     * @brief create - creates the only instance of the class
+     * @param argc - argument counter passed to main() function
+     * @param argv - argument vector passed to main() function
+     */
     static void create(int argc, const char  * argv[]);
+
+    /**
+     * @brief instance
+     * @return the only instance of the class
+     */
     static CommandLine & instance();
 
     ~CommandLine();
 
+    /**
+     * @brief help
+     * @return true - help argument was set on command line
+     *         false - help command was not set on command line
+     */
 	bool help()const
 	{return m_help;}
 
+    /**
+     * @brief helpText
+     * @return the help text
+     */
 	std::string helpText()const
 	{return m_helpText;}
 
+    /**
+     * @brief showVersionInfo
+     * @return true - version info was requested on command line
+     *         false - version info was not requested on command line
+     */
     bool showVersionInfo()const
     {return m_showVersionInfo;}
 

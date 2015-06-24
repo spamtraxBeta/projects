@@ -88,7 +88,8 @@ m_help(false)
 , m_value(0)
 , m_address(1)
 , m_showVersionInfo(false)
-, m_logFile("%Y-%m-%d %H_%M_%S (%6N).log")
+, m_logFile("Relaiscardls.log")
+//, m_logFile("%Y-%m-%d %H_%M_%S (%6N).log")
 {
 	// Declare the supported options.
 	po::options_description desc("Allowed options");

@@ -187,8 +187,8 @@ CommandLine::CommandLine(int argc, const char * argv[]) :
 	unsigned int baudRate = m_baudRate.value();
 	Workaround::parity parity = static_cast<Workaround::parity>(m_parity.value());
 	unsigned int characterSize = m_characterSize.value();
-	Workaround::stopBits sbit = static_cast<Workaround::stopBits>(m_stopBits.value()); // Workaround::stopBits_one;
-	Workaround::flowControl flowControl = static_cast<Workaround::flowControl>(m_flowControl.value()); //  Workaround::flowControl_none;
+    Workaround::stopBits sbit = static_cast<Workaround::stopBits>(m_stopBits.value());
+    Workaround::flowControl flowControl = static_cast<Workaround::flowControl>(m_flowControl.value());
 
 	// Declare the supported options.
 	po::options_description desc("Allowed options");
