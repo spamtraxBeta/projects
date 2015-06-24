@@ -34,9 +34,9 @@ class byte_t
 {
 public:
 
-//    byte_t() :
-//        m_value(0)
-//    {}
+    byte_t() :
+        m_value(0)
+    {}
 
     byte_t(const uint8_t & arg) :
         m_value(arg)

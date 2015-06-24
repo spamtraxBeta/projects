@@ -21,7 +21,9 @@ LIBS += \
     -lboost_thread \
     -lboost_filesystem \
     -lboost_log_setup \
-    -lpthread
+    -lboost_random \
+    -lpthread \
+    -lrt
 
 
 QMAKE_CXXFLAGS += -std=c++0x
