@@ -6,7 +6,8 @@ HEADERS += \
     $$PWD/MaEr/toggle/toggle.hpp \
     $$PWD/MaEr/trace/trace.hpp \
     $$PWD/MaEr/types/byte_t.hpp \
-    $$PWD/MaEr/log/logHelper.hpp
+    $$PWD/MaEr/log/logHelper.hpp \
+    $$PWD/MaEr/unusedvariable.hpp
 
 SOURCES += \
     $$PWD/MaEr/urlencode/urlencode.cpp \

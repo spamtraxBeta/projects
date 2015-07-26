@@ -147,6 +147,7 @@ int main(int argc, const char * argv[])
         logTrace() << "Sending name of shared memory to remote process: '" << shmName << "'";
         mq.send(shmName.c_str(), shmName.length() + 1, 0);
 
+#warning "To be checked: first lock should be applied before sending shared memory name to remote process!!"
         logTrace() << "Locking mutex in shared object";
         binter::scoped_lock<binter::interprocess_mutex> lock(ic->mutex());
 

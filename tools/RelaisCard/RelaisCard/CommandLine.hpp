@@ -22,6 +22,9 @@
 #include "../Common//RelaisFrame.hpp"
 #include <MaEr/types/byte_t.hpp>
 
+/**
+ * @brief The CommandLine class takes
+ */
 class CommandLine
 {
 public:

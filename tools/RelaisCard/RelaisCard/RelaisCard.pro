@@ -37,7 +37,8 @@ HEADERS += \
     CommandLine.hpp \
     ../Common/InterprocessComm.hpp \
     ../Common/RelaisError.hpp \
-    ../Common/RelaisFrame.hpp
+    ../Common/RelaisFrame.hpp \
+    ../Introduction.hpp
 
 
 

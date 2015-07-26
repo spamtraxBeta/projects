@@ -20,18 +20,30 @@
 
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
-#include <boost/asio/serial_port.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+
+#include <MaEr/unusedvariable.hpp>
 
 #include <iostream>
 
 
+/**
+ * No timeout can be set when using boost:asio for reading
+ * from a port.
+ * http://stackoverflow.com/questions/13126776/asioread-with-timeout
+ * shows a solution:
+ *  1) start a timer before reading,
+ *  2) cancel reading if timer expires before data is received
+ */
 template <class port_t>
 class TimeoutReader
 {
 public:
-    //typedef boost::asio::serial_port port_t;
-
+    /**
+     * @brief TimeoutReader
+     * @param port: Port to read data from
+     * @param timeoutMs: Max time to wait for incoming data
+     */
     TimeoutReader(port_t & port, boost::int64_t timeoutMs) :
         m_ioService(port.get_io_service())
         , m_timer(m_ioService, boost::posix_time::milliseconds(timeoutMs))
@@ -40,15 +52,22 @@ public:
     {
 
     }
+
     ~TimeoutReader()
     {
 
     }
 
+    /**
+     * @brief read: Reads data from port given in constructor,
+     *              waits max time defined in constructor.
+     * @param buffer: Received data will be stored in this buffer
+     * @return true - data has been received
+     *         false - timeout while waiting for data
+     */
     bool read(boost::asio::mutable_buffers_1 buffer)
     {
         m_dataReceived = false;
-        //std::cerr << "enter read()" << std::endl;
      
         m_ioService.reset();
 
@@ -66,11 +85,8 @@ public:
                 boost::asio::placeholders::bytes_transferred
             )
         );
-
        
         m_ioService.run();
-
-        //std::cerr << "exit read() = " << m_dataReceived << std::endl;
         return m_dataReceived;
     }
 
@@ -78,19 +94,18 @@ private:
 
     void onTimeout()
     {
-        //std::cerr << "Timeout"<<std::endl;
-        //m_dataReceived = false;
-
         if (m_dataReceived == false)
         {
             m_port.cancel();
         }
-        
     }
+
+
 
     void handle_read(const boost::system::error_code & ec, std::size_t numberBytes)
     {
-        //std::cerr << "handle_read; ec=" << ec <<"; numberBytes = "<<numberBytes<<std::endl;
+        MaEr::unused_variable(numberBytes, "Result is stored in a boost::asio::mutable_buffers_1 which already contains the size");
+
         if (ec)
         {
             // handle error

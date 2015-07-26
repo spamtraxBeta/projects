@@ -36,7 +36,6 @@
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
 #include <boost/thread/thread_time.hpp>
-#include <boost/log/trivial.hpp>
 
 #include <MaEr/log/logHelper.hpp>
 
@@ -56,8 +55,12 @@ using std::stringstream;
 namespace binter = boost::interprocess;
 
 
-
-
+/**
+ * @brief main
+ * @param argc
+ * @param argv
+ * @return
+ */
 int main(int argc, const char * argv[])
 {
     MaEr::LogHelper::init();
