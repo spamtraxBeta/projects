@@ -24,14 +24,14 @@
 
 #include <vector>
 
-#include "CommandLine.hpp"
+#include "CommandLineD.hpp"
 #include "RelaisCard.hpp"
 
 
 class RelaisCardInitializer
 {
 public:
-    RelaisCardInitializer(boost::asio::io_service & ioService, const CommandLine & cmdLine, uint8_t cardAddress = 0);
+    RelaisCardInitializer(boost::asio::io_service & ioService, const CommandLineD & cmdLine, uint8_t cardAddress = 0);
     ~RelaisCardInitializer();
 
     boost::uint8_t firstCardAddress()const
@@ -49,7 +49,7 @@ public:
 
 
 private:
-    const CommandLine & m_cmdLine;
+    const CommandLineD & m_cmdLine;
     boost::asio::io_service & m_ioService;
     boost::shared_ptr<boost::asio::serial_port> m_serialPort;
     uint8_t m_firstCardAddress;

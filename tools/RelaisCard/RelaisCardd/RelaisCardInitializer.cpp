@@ -24,7 +24,7 @@
 #include "../Common/RelaisFrame.hpp"
 #include "../Common/RelaisError.hpp"
 
-RelaisCardInitializer::RelaisCardInitializer(boost::asio::io_service & ioService, const CommandLine & cmdLine, uint8_t cardAddress) :
+RelaisCardInitializer::RelaisCardInitializer(boost::asio::io_service & ioService, const CommandLineD & cmdLine, uint8_t cardAddress) :
     m_cmdLine(cmdLine)
     , m_ioService(ioService)
     , m_firstCardAddress(cardAddress)

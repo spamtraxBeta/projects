@@ -26,10 +26,10 @@
 #include <MaEr/types/byte_t.hpp>
 
 /**
- * @brief The CommandLine class parses command line arguments
- * and provides the settings with getter functions
+ * @brief The CommandLineD class parses command line arguments
+ * of the daemon and provides the settings with getter functions
  */
-class CommandLine : boost::noncopyable
+class CommandLineD : boost::noncopyable
 {
 public:
 
@@ -44,9 +44,9 @@ public:
      * @brief instance
      * @return the only instance of the class
      */
-    static CommandLine & instance();
+    static CommandLineD & instance();
 
-    ~CommandLine();
+    ~CommandLineD();
 
     /**
      * @brief help
@@ -99,7 +99,7 @@ public:
     {return m_logFile;}
 
 private:
-    static boost::shared_ptr<CommandLine> m_instance;
+    static boost::shared_ptr<CommandLineD> m_instance;
 
 	std::string m_port;
 	boost::asio::serial_port_base::baud_rate m_baudRate;
@@ -115,7 +115,7 @@ private:
 
 	std::string m_helpText;
 
-    CommandLine(int argc, const char * argv[]);
+    CommandLineD(int argc, const char * argv[]);
 };
 
 #endif // CommandLine_hpp

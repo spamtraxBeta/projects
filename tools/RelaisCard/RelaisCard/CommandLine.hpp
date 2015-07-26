@@ -28,8 +28,8 @@
 class CommandLine
 {
 public:
-	CommandLine(int argc, const char * argv[]);
-	~CommandLine();
+    CommandLine(int argc, const char * argv[]);
+    ~CommandLine();
 
 
 	bool help()const

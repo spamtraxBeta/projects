@@ -39,7 +39,7 @@
 
 #include <MaEr/log/logHelper.hpp>
 
-#include "CommandLine.hpp"
+#include "CommandLineD.hpp"
 #include "RelaisCardInitializer.hpp"
 
 #include "../Common/InterprocessComm.hpp"
@@ -71,8 +71,8 @@ int main(int argc, const char * argv[])
 	{
         // Read command line
         logTrace() << "Creating command line parser";
-        CommandLine::create(argc, argv);
-        CommandLine & cmdLine = CommandLine::instance();
+        CommandLineD::create(argc, argv);
+        CommandLineD & cmdLine = CommandLineD::instance();
 
 		if (cmdLine.help())
 		{

@@ -10,9 +10,9 @@ SOURCES += \
     ../Common/RelaisError.cpp \
     ../Common/RelaisFrame.cpp \
     RelaisCard.cpp \
-    CommandLine.cpp \
     RelaisCardd.cpp \
-    RelaisCardInitializer.cpp
+    RelaisCardInitializer.cpp \
+    CommandLineD.cpp
 
 
 LIBS += \
@@ -36,12 +36,12 @@ include(../../deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
-    CommandLine.hpp \
     ../Common/InterprocessComm.hpp \
     ../Common/RelaisError.hpp \
     ../Common/RelaisFrame.hpp \
     RelaisCard.hpp \
-    RelaisCardInitializer.hpp
+    RelaisCardInitializer.hpp \
+    CommandLineD.hpp
 
 DISTFILES +=
 

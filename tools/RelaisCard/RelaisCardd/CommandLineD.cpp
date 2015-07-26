@@ -15,7 +15,7 @@
 * along with RelaisCard.If not, see <http://www.gnu.org/licenses/>.           *
 *******************************************************************************/
 
-#include "CommandLine.hpp"
+#include "CommandLineD.hpp"
 
 
 #include <boost/program_options.hpp>
@@ -29,7 +29,7 @@
 #include <sstream>
 
 
-boost::shared_ptr<CommandLine> CommandLine::m_instance;
+boost::shared_ptr<CommandLineD> CommandLineD::m_instance;
 
 
 namespace bsys = boost::system;
@@ -146,18 +146,17 @@ std::istream& operator>>(std::istream & in, Workaround::flowControl & sb)
 }
 
 
-void CommandLine::create(int argc, const char * argv[])
+void CommandLineD::create(int argc, const char * argv[])
 {
     BOOST_LOG_FUNCTION();
 
     if (!m_instance)
     {
-        //m_instance = boost::make_shared<CommandLine>(argc, argv);
-        m_instance = boost::shared_ptr<CommandLine>(new CommandLine(argc, argv));
+        m_instance = boost::shared_ptr<CommandLineD>(new CommandLineD(argc, argv));
     }
 }
 
-CommandLine & CommandLine::instance()
+CommandLineD & CommandLineD::instance()
 {
     BOOST_LOG_FUNCTION();
 
@@ -171,7 +170,7 @@ CommandLine & CommandLine::instance()
     }
 }
 
-CommandLine::CommandLine(int argc, const char * argv[]) :
+CommandLineD::CommandLineD(int argc, const char * argv[]) :
 	m_port("\\\\.\\COM16")
 	, m_baudRate(19200)
 	, m_parity(basio::serial_port_base::parity::none)
@@ -249,7 +248,7 @@ CommandLine::CommandLine(int argc, const char * argv[]) :
 }
 
 
-CommandLine::~CommandLine()
+CommandLineD::~CommandLineD()
 {
     //BOOST_LOG_FUNCTION();
 }
