@@ -22,14 +22,14 @@
 #include <boost/thread.hpp>
 #include <iostream>
 #include <MaEr/log/logHelper.hpp>
+#include <MaEr/boostHelpers/asioTimeoutReader.hpp>
+#include "../Common/RelaisError.hpp"
 
 using std::cout;
 using std::cerr;
 using std::endl;
 using std::cin;
 
-#include "../Common/RelaisError.hpp"
-#include "TimeoutReader.hpp"
 
 RelaisCard::RelaisCard(boost::asio::serial_port & serialPort, boost::uint8_t cardAddress) :
     m_serialPort(serialPort)
@@ -260,7 +260,7 @@ void RelaisCard::exec(RelaisFrame & request, RelaisFrame & response)
     boost::asio::write(m_serialPort, request.buffer());
 
     int waitTimeMs = 1000;
-    TimeoutReader<boost::asio::serial_port> tr(m_serialPort, waitTimeMs);
+    MaEr::BoostHelper::asioTimeoutReader<boost::asio::serial_port> tr(m_serialPort, waitTimeMs);
 
     // read response
     boost::asio::mutable_buffers_1 bb = response.buffer();

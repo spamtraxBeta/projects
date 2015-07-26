@@ -19,9 +19,9 @@
 
 #include <boost/make_shared.hpp>
 #include <MaEr/log/logHelper.hpp>
+#include <MaEr/boostHelpers/asioTimeoutReader.hpp>
 
 #include "../Common/RelaisFrame.hpp"
-#include "TimeoutReader.hpp"
 #include "../Common/RelaisError.hpp"
 
 RelaisCardInitializer::RelaisCardInitializer(boost::asio::io_service & ioService, const CommandLine & cmdLine, uint8_t cardAddress) :
@@ -94,7 +94,7 @@ void RelaisCardInitializer::setup(boost::asio::serial_port & serialPort, const u
 
 
     int msToWaitForResponse = 1000;
-    TimeoutReader<boost::asio::serial_port> tr(serialPort, msToWaitForResponse);
+    MaEr::BoostHelper::asioTimeoutReader<boost::asio::serial_port> tr(serialPort, msToWaitForResponse);
 
     int nextFreeAddress = firstAddress;
 

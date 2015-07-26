@@ -7,13 +7,15 @@ HEADERS += \
     $$PWD/MaEr/trace/trace.hpp \
     $$PWD/MaEr/types/byte_t.hpp \
     $$PWD/MaEr/log/logHelper.hpp \
-    $$PWD/MaEr/unusedvariable.hpp
+    $$PWD/MaEr/unusedvariable.hpp \
+    $$PWD/MaEr/boostHelpers/asioTimeoutReader.hpp
 
 SOURCES += \
     $$PWD/MaEr/urlencode/urlencode.cpp \
     $$PWD/MaEr/toggle/toggle.cpp \
     $$PWD/MaEr/types/byte_t.cpp \
-    $$PWD/MaEr/log/logHelper.cpp
+    $$PWD/MaEr/log/logHelper.cpp \
+    $$PWD/MaEr/boostHelpers/asioTimeoutReader.cpp
 
 LIBS += \
     -lboost_system \

@@ -12,8 +12,7 @@ SOURCES += \
     RelaisCard.cpp \
     CommandLine.cpp \
     RelaisCardd.cpp \
-    RelaisCardInitializer.cpp \
-    TimeoutReader.cpp
+    RelaisCardInitializer.cpp
 
 
 LIBS += \
@@ -42,8 +41,7 @@ HEADERS += \
     ../Common/RelaisError.hpp \
     ../Common/RelaisFrame.hpp \
     RelaisCard.hpp \
-    RelaisCardInitializer.hpp \
-    TimeoutReader.hpp
+    RelaisCardInitializer.hpp
 
 DISTFILES +=
 

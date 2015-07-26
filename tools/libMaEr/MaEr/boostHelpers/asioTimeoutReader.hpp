@@ -15,8 +15,8 @@
 * along with RelaisCard.If not, see <http://www.gnu.org/licenses/>.           *
 *******************************************************************************/
 
-#ifndef TimeoutReader_hpp
-#define TimeoutReader_hpp
+#ifndef asioTimeoutReader_hpp
+#define asioTimeoutReader_hpp
 
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
@@ -26,7 +26,10 @@
 
 #include <iostream>
 
-
+namespace MaEr
+{
+namespace BoostHelper
+{
 /**
  * No timeout can be set when using boost:asio for reading
  * from a port.
@@ -36,7 +39,7 @@
  *  2) cancel reading if timer expires before data is received
  */
 template <class port_t>
-class TimeoutReader
+class asioTimeoutReader
 {
 public:
     /**
@@ -44,7 +47,7 @@ public:
      * @param port: Port to read data from
      * @param timeoutMs: Max time to wait for incoming data
      */
-    TimeoutReader(port_t & port, boost::int64_t timeoutMs) :
+    asioTimeoutReader(port_t & port, boost::int64_t timeoutMs) :
         m_ioService(port.get_io_service())
         , m_timer(m_ioService, boost::posix_time::milliseconds(timeoutMs))
         , m_port(port)
@@ -53,7 +56,7 @@ public:
 
     }
 
-    ~TimeoutReader()
+    ~asioTimeoutReader()
     {
 
     }
@@ -71,7 +74,7 @@ public:
      
         m_ioService.reset();
 
-        m_timer.async_wait(boost::bind(&TimeoutReader::onTimeout, this));
+        m_timer.async_wait(boost::bind(&asioTimeoutReader::onTimeout, this));
         
         boost::asio::async_read
         (
@@ -79,7 +82,7 @@ public:
             buffer,
             boost::bind
             (
-                &TimeoutReader::handle_read,
+                &asioTimeoutReader::handle_read,
                 this,
                 boost::asio::placeholders::error,
                 boost::asio::placeholders::bytes_transferred
@@ -126,5 +129,7 @@ private:
     bool m_dataReceived;
 };
 
+} // end namespace BoostHelper
+} // end namespace MaEr
 
-#endif // TimeoutReader_hpp
+#endif // asioTimeoutReader_hpp
