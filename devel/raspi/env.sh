@@ -1,5 +1,8 @@
 #! /bin/bash
 
+# "source" this script to setup a cross compile environment for raspberry pi
+
+
 # http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
 getScriptDir()
 {

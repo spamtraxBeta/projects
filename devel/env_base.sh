@@ -1,5 +1,9 @@
 #! /bin/sh
 
+# This script sets up a cross compile environment
+
+# "source" it with following parameters:
+
 
 # examples:
 # /path/to/arm-marvell-linux-gnueabi
@@ -17,6 +21,9 @@ host="$3"
 # example: "/path/to/prefixDir"
 prefix="$4"
 
+############################################################
+# set environment variables
+############################################################
 cross_include="${toolPath}/include"
 cross_lib="${toolPath}/lib"
 
