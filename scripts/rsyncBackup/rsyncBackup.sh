@@ -87,9 +87,9 @@ makeBackup()
 
     cmd="rsync  $commonArgs "
     echo "#############"
-    echo $cmd
+    echo "$cmd"
     echo "================"
-    eval $cmd || exit
+    eval "$cmd" || exit
 }
 
 
@@ -139,49 +139,56 @@ makeRules()
 
 printConfigTmpl()
 {
-    echo '###########################################'
-    echo '# Settings'
-    echo '###########################################'
-    echo ''
-    echo '# 0: create backup on local drive'
-    echo '# 1: create backup on server'
-    echo 'remoteBackup=0'
-    echo ''
-    echo ''
-    echo '# destination directory for the backup'
-    echo 'destinationDirectory="backup";'
-    echo '#destinationDirectory="/foo/backupDir";'
-    echo ''
-    echo '# The starting directory for backups (all files and directories'
-    echo '# which should end up in the backup need to be inside this directory'
-    echo 'localBackupRoot="/home/myName/"'
-    echo ''
-    echo '# A directory with this name will be created in $destinationDirectory.'
-    echo '# Deleted or overwritten files will be backed up in there.'
-    echo 'backupName=".rsyncBackup"'
-    echo ''
-    echo 'includeConfig=(\'
-    echo '"+ **" \'
-    echo '"- *"'
-    echo ')'
-    echo ''
-    echo ''
-    echo ''
-    echo '###########################################'
-    echo '# Settings for remote ($remoteBackup == 1) backups'
-    echo '###########################################'
-    echo ''
-    echo '# username for ssh login'
-    echo 'username="myName"'
-    echo ''
-    echo '# Server address'
-    echo 'remoteHost="foo.example.com"'
-    echo ''
-    echo '# rsync modul in which the backups will be created'
-    echo 'module="::omv_homes/${username}";'
-    echo ''
-    echo '# port for ssh connection'
-    echo 'sshPort=22'
+echo '###########################################'
+echo '# Settings'
+echo '###########################################'
+echo ''
+echo '# 0: create backup on local drive'
+echo '# 1: create backup on server'
+echo 'remoteBackup=1'
+echo ''
+echo '###########################################'
+echo '# Settings for remote ($remoteBackup == 1) backups'
+echo '###########################################'
+echo ''
+echo '# username for ssh login'
+echo 'username="homer"'
+echo ''
+echo '# Server address'
+echo 'remoteHost="omv"'
+echo ''
+echo '# rsync modul in which the backups will be created'
+echo 'module="::omv_homes/${username}";'
+echo ''
+echo '# port for ssh connection'
+echo 'sshPort=22'
+echo ''
+echo '###########################################'
+echo '# Common settings'
+echo '###########################################'
+echo ''
+echo '# destination directory for the backup'
+echo 'destinationDirectory="backup";'
+echo ''
+echo '# The starting directory for backups (all files and directories'
+echo '# which should end up in the backup need to be inside this directory'
+echo 'localBackupRoot="/home/foo"'
+echo ''
+echo '# Changed or deleted files will be backed up in this directory.'
+echo '# Note: this directory needs to be outside $destinationDirectory!'
+echo '#   Use something like "../.rsyncBackup" for local backups (($remoteBackup == 0)'
+echo '#   In case of remote backups (($remoteBackup != 0) an absolute path inside the'
+echo '#   module is suggested (something like "/$username/.rsyncBackup")'
+echo 'backupName="/$username/.rsyncBackup"'
+echo '#backupName="../.rsyncBackup"'
+echo ''
+echo ''
+echo '# Each item will end up as a "--include" parameter for rsync'
+echo 'includeConfig=(\'
+echo '"+ **" \'
+echo '"- *"'
+echo ')'
+echo ''
 
 }
 
@@ -210,7 +217,7 @@ printUsage()
     echo "  Copy changed local files to a directory"
     echo ""
     echo "backup (configFile)"
-    echo "  Create a backup for folders defined in \"$includeFromFile\""
+    echo "  Create backup according to config file"
     echo ""
     echo "#############################################################"
 }
