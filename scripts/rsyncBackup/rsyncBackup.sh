@@ -2,13 +2,6 @@
 
 
 
-# liefert den Inhalt eines Verzeichnisses im Sicherungsverzeichnis
-#getRemoteDirectory()
-#{
-#    local dir="$1"
-#    rsync --list-only --rsh="$sshCmd" $destination/$dir
-#}
-
 getCommmonRsyncArgs()
 {    
     local backupDir="$backupName/$(date +'%Y-%m-%d---%H_%M_%S')/"
@@ -32,15 +25,6 @@ getCommmonRsyncArgs()
         result="$result --rsh=\"ssh -p $sshPort\" $localBackupRoot ${username}@${remoteHost}${module}/${destinationDirectory}"
     fi
     
-
-    
-    #if [ -z $withRsyncPath ]
-    #then
-    #    echo "" > /dev/null
-    #else
-    #    result="--rsync-path=\"mkdir -p ${destinationDirectory}/$newSnapShotName && rsync\" $result"
-    #fi
-    
     echo $result;
 }
 
@@ -63,13 +47,12 @@ exportChanges()
     
     local numChanged=$(echo "$changedFiles" | wc -l)
     local counter=1
+
     echo "$changedFiles" | while read line; do
         local exportedFile="$exportDir/$line"
         
         
         # use "rsync" instead of "cp" to show progress
-        #printf "[%i/%i] %s => %s\n" $counter $numChanged "/$line" "$exportedFile"
-        #cp -a --parents --no-preserve ownership "/$line" "$exportDir"
         printf "[%i/%i]\n" $counter $numChanged
         rsync  --progress --archive --relative --chmod=ugo=rwX "/$line" "$exportDir"
         echo ""
@@ -98,7 +81,7 @@ checkDir()
 
 makeBackup()
 {
-    checkDir "backupName" || exit 1
+#    checkDir "backupName" || exit 1
 
     commonArgs=$(getCommmonRsyncArgs)
 
