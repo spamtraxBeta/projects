@@ -13,8 +13,9 @@ getCommmonRsyncArgs()
         includeParams="${includeParams} --include=\"${includeConfig[$i]}\""
     done
 
-    
-    local result="--verbose --recursive --links --times --devices --specials --backup --backup-dir=\"$backupDir\" --delete --chmod=ugo=rwX $includeParams --progress --partial --append-verify"
+    # note: file must be writable by the user, otherwise rsync will fail with the next run
+    #       in case of changed files as the file cannot be modified
+    local result="--verbose --recursive --links --times --devices --specials --backup --backup-dir=\"$backupDir\" --delete --chmod=u=rwX,g=,o= $additionalParams $includeParams --progress --partial --append-verify"
 
     if [ $remoteBackup == 0 ]
     then
