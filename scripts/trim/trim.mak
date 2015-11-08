@@ -3,10 +3,12 @@
 # Afterwards use exiftool to delete thumbnailimage from
 # trimmed image
 
-fuzzPercentage=50
+fuzzPercentage ?= 25
 trimmedDir=trimmed_$(fuzzPercentage)
-input=$(shell ls *.JPG) ;
-output=$(input:%.JPG=$(trimmedDir)/%.JPG)
+#filePattern ?= *.JPG *.jpg
+#input ?= $(shell ls $(filePattern)) ;
+input ?= $(shell find . -maxdepth 1 -iname "*.jpg") ;
+output=$(input:%=$(trimmedDir)/%)
 
 
 all: trimDir $(output)
@@ -15,8 +17,8 @@ all: trimDir $(output)
 trimDir:
 	mkdir -p $(trimmedDir)
 	
-$(trimmedDir)/%.JPG: $(input)
-	convert -trim +repage -fuzz $(fuzzPercentage)% $(@:$(trimmedDir)/%.JPG=%).JPG $@
+$(trimmedDir)/%: $(input)
+	convert -trim +repage -fuzz $(fuzzPercentage)% $(@:$(trimmedDir)/%=%) $@
 	exiftool -overwrite_original -thumbnailimage= $@
 	
 clean:

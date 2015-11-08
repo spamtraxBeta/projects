@@ -1,9 +1,29 @@
 #! /bin/bash
 
+fuzzPercentage=25
+numCores=$(nproc)
 
 printUsage()
 {
-	echo "Usage: "
+	echo "Searches jpg files in current directory and passes them"
+	echo "to convert from imagemagick to trim the files."
+	echo ""
+	echo "Usage: $(basename $0) [-f FuzzPercentage] [-j NumCores]"
+	echo ""
+	echo "Optional parameters: "
+	echo "  -f: Fuzzing percentage for trim step;"
+	echo "      Default value: $fuzzPercentage"
+	echo ""
+	echo "  -j: Number of parallel runs."
+	echo "      Default value: $numCores"
+	echo ""
+	echo "Example calls:"
+	echo "  $(basename $0)"
+	echo "  $(basename $0) -f 42"
+	echo "  $(basename $0) -j 3"
+	echo "  $(basename $0) -f 42 -j 3"
+	echo ""
+	echo "Note: File names containing spaces are not supported at the moment."
 }
 
 # http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
@@ -20,10 +40,8 @@ getScriptDir()
 	echo $DIR
 }
 
-fuzzPercentage=25
-numCores=$(nproc)
 
-while getopts ":f:j:" opt; do
+while getopts ":f:j:h" opt; do
 	case $opt in
 		f)
 			fuzzPercentage=$OPTARG;
@@ -31,6 +49,11 @@ while getopts ":f:j:" opt; do
 		
 		j)
 			numCores=$OPTARG;
+		;;
+		
+		h)
+			printUsage
+			exit 0
 		;;
 		
 		\?)
@@ -49,6 +72,9 @@ done
 
 scriptDir=$(getScriptDir)
 
-make -f "$scriptDir/trim.mak" -j $numCores
+# http://unix.stackexchange.com/questions/114943/can-sed-replace-new-line-characters
+#make -f trim.mak  -j $numCores fuzzPercentage=$fuzzPercentage input="$(ls *.JPG *.jpg | sed  ':a;N;$!ba;s/\n/ /g')"
+make -f trim.mak  -j $numCores fuzzPercentage=$fuzzPercentage input="$(find . -maxdepth 1 -iname "*.jpg" | sed  ':a;N;$!ba;s/\n/ /g')"
+
 
 
