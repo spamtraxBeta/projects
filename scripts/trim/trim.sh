@@ -73,8 +73,8 @@ done
 scriptDir=$(getScriptDir)
 
 # http://unix.stackexchange.com/questions/114943/can-sed-replace-new-line-characters
-#make -f trim.mak  -j $numCores fuzzPercentage=$fuzzPercentage input="$(ls *.JPG *.jpg | sed  ':a;N;$!ba;s/\n/ /g')"
-make -f trim.mak  -j $numCores fuzzPercentage=$fuzzPercentage input="$(find . -maxdepth 1 -iname "*.jpg" | sed  ':a;N;$!ba;s/\n/ /g')"
+#make -f "$scriptDir/trim.mak"  -j $numCores fuzzPercentage=$fuzzPercentage input="$(ls *.JPG *.jpg | sed  ':a;N;$!ba;s/\n/ /g')"
+make -f "$scriptDir/trim.mak"  -j $numCores fuzzPercentage=$fuzzPercentage input="$(find . -maxdepth 1 -iname "*.jpg" | sed  ':a;N;$!ba;s/\n/ /g')"
 
 
 
