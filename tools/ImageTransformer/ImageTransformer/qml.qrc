@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainForm.ui.qml</file>
+    </qresource>
+    <qresource prefix="/res/img">
+        <file>resources/images/gradient.png</file>
+    </qresource>
+</RCC>
