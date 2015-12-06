@@ -103,6 +103,36 @@ void DirIterator::next()
     this->setCurrentFile(result);
 }
 
+void DirIterator::previous()
+{
+    QString result;
+
+    if (m_files.empty())
+    {
+        result = "";
+    }
+    else if (m_iterator == m_files.end())
+    {
+        m_iterator = m_files.begin();
+        result = *m_iterator;
+    }
+    else
+    {
+        if (m_iterator == m_files.begin())
+        {
+            result = *m_iterator;
+            m_iterator = m_files.end();
+            --m_iterator;
+        }
+        else
+        {
+            result = *m_iterator;
+            --m_iterator;
+        }
+    }
+    this->setCurrentFile(result);
+}
+
 void DirIterator::updateIterator(QString dir, QStringList fileTypes)
 {
     QUrl url(dir);

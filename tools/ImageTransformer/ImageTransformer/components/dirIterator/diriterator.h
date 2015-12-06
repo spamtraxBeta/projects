@@ -19,6 +19,7 @@ public:
     void setDir(const QString &dir);
 
     Q_INVOKABLE void next();
+    Q_INVOKABLE void previous();
 
 
     QString currentFile() const;

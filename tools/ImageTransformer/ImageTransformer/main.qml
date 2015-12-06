@@ -112,6 +112,10 @@ ApplicationWindow {
                 dirIterator.next()
                 break;
 
+            case Qt.Key_Left:
+                dirIterator.previous();
+                break;
+
             case Qt.Key_H:
                 action.flipH = !action.flipH
                 break;
