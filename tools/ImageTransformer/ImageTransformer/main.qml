@@ -136,6 +136,10 @@ ApplicationWindow {
                 action.rot270cw = !action.rot270cw
                 break;
 
+            case Qt.Key_N:
+                action.negative = !action.negative;
+                break;
+
             case Qt.Key_Q:
                 Qt.quit()
                 break;
@@ -151,6 +155,7 @@ ApplicationWindow {
         property bool rot90cw
         property bool rot180cw
         property bool rot270cw
+        property bool negative
         property bool save;
 
         function reset()
@@ -160,6 +165,7 @@ ApplicationWindow {
             action.rot90cw = false;
             action.rot180cw = false;
             action.rot270cw = false;
+            action.negative = false;
             action.save = false
         }
 
@@ -176,6 +182,7 @@ ApplicationWindow {
         onRot90cwChanged: actionChanged()
         onRot180cwChanged: actionChanged()
         onRot270cwChanged: actionChanged()
+        onNegativeChanged: actionChanged()
         onSaveChanged: actionChanged()
         function actionChanged()
         {
@@ -213,6 +220,11 @@ ApplicationWindow {
             if (action.rot270cw)
             {
                 actions[counter++] = "rot270cw"
+            }
+
+            if (action.negative)
+            {
+                actions[counter++] = "negative"
             }
 
             if (action.save)

@@ -116,6 +116,23 @@ QImage TransformProvider::requestImage(const QString &id, QSize *size, const QSi
             result = result.transformed(trans, Qt::FastTransformation);
             modified = true;
         }
+        else if (*iter == "negative")
+        {
+            int numberLines = result.height();
+
+            for (int l = 0; l < numberLines; ++l)
+            {
+                int numBytes = result.bytesPerLine();
+                uchar * line = result.scanLine(l);
+
+                for (int i = 0; i < numBytes; ++i)
+                {
+                    line[i] = 255 - line[i];
+                }
+            }
+
+            modified = true;
+        }
         else if (*iter == "save")
         {
             if (modified == false)
