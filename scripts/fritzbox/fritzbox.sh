@@ -72,11 +72,11 @@ calculateResponse()
 	
 	
 	# printf "%s-%s" $challenge $password	=> create input string
-	# iconv.exe -f UTF8 -t UTF16LE			=> convert input string to UTF16LE format
+	# iconv -f UTF8 -t UTF16LE				=> convert input string to UTF16LE format
 	# sed -r 's/^\xfe\xff(.*)/\1/'			=> remove BOM (byte order mask)
 	# md5sum								=> calculate checksum
 	# awk '{print $1}')						=> remove stuff after checksum
-	local checkSum=$(printf "%s-%s" $challenge $password | iconv.exe -f UTF8 -t UTF16LE | sed -r 's/^\xfe\xff(.*)/\1/' | md5sum | awk '{print $1}')
+	local checkSum=$(printf "%s-%s" $challenge $password | iconv -f UTF8 -t UTF16LE | sed -r 's/^\xfe\xff(.*)/\1/' | md5sum | awk '{print $1}')
 	
 	echo "${challenge}-${checkSum}"
 }
