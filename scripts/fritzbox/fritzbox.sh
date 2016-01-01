@@ -7,6 +7,9 @@
 PATH_LOGIN="login_sid.lua"
 PATH_HOMEAUTOSWITCH="webservices/homeautoswitch.lua"
 
+URL_DEBUG=0
+
+
 printUsage()
 {
 	echo "This script interacts with a AVM switch (like"
@@ -44,6 +47,9 @@ printUsage()
 	echo ""
 	echo "Other important note:"
 	echo "If username is empty pass it with empty string: -u \"\""
+	echo ""
+	echo "Debug options:"
+	echo "-U: print all URL requests to STDERR"
 }
 
 logMessage()
@@ -56,8 +62,17 @@ logMessage()
 requestWebsite()
 {
 	local address="$1"
-	#echo "RW: ${address}" >&2
-	curl "${address}" 2> /dev/null
+	
+	local result=$(curl "${address}" 2> /dev/null)
+	
+	if [[ URL_DEBUG -ne 0 ]]
+	then
+		echo "${address}" >&2
+		echo "$result" >&2
+	fi
+	
+	echo "$result";
+	
 }
 
 runCommand()
@@ -202,7 +217,7 @@ URL=""
 doLogout=1
 list=0
 
-while getopts ":u:p:s:nla:d:q:h" opt; do
+while getopts ":u:p:s:nla:d:q:hU" opt; do
 	case $opt in
 		u)
 			user=$OPTARG;
@@ -243,6 +258,10 @@ while getopts ":u:p:s:nla:d:q:h" opt; do
 		h)
 			printUsage
 			exit 0
+		;;
+		
+		U)
+			URL_DEBUG=1;
 		;;
 		
 		\?)
