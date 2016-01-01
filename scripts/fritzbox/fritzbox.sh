@@ -53,6 +53,13 @@ logMessage()
 	#echo "$key = $message" >&2
 }
 
+requestWebsite()
+{
+	local address="$1"
+	#echo "${address}" >&2
+	curl "${address}" 2> /dev/null
+}
+
 runCommand()
 {
 	local cmd="$1"
@@ -65,7 +72,9 @@ runCommand()
 requestChallenge()
 {
 	local url="$1"
-	local response=$(curl ${url}/${PATH_LOGIN} 2> /dev/null);
+	
+	
+	local response=$(requestWebsite ${url}/${PATH_LOGIN});
 	logMessage "requestChallenge_response" "$response"
 	
 	local challenge=$(echo "$response" | sed -r 's/.*<Challenge>(.*?)<\/Challenge>.*/\1/')
@@ -127,7 +136,7 @@ login()
 	local url="$1"
 	local userName="$2"
 	local response="$3"
-	local sid=$(curl "${url}/${PATH_LOGIN}?username=${userName}&response=${response}" 2> /dev/null | sed -r 's/.*<SID>(.*?)<\/SID>.*/\1/')
+	local sid=$(requestWebsite "${url}/${PATH_LOGIN}?username=${userName}&response=${response}" | sed -r 's/.*<SID>(.*?)<\/SID>.*/\1/')
 	echo "$sid"
 }
 
@@ -137,7 +146,7 @@ logout()
 	#echo "LOGOUT: ${url}/${PATH_LOGIN}?logout=yes&sid=${sid}" >&2
 	local sid="$1"
 	
-	local sid=$(curl "${url}/${PATH_LOGIN}?logout=yes&sid=${sid}" 2> /dev/null)
+	local sid=$(requestWebsite "${url}/${PATH_LOGIN}?logout=yes&sid=${sid}")
 }
 
 
@@ -168,7 +177,7 @@ has_exec()
 	local ain="$3"
 	local cmd="$4"
 	
-	local result=$(curl "${url}/${PATH_HOMEAUTOSWITCH}?ain=${ain}&switchcmd=${cmd}&sid=${sid}" 2> /dev/null)
+	local result=$(requestWebsite "${url}/${PATH_HOMEAUTOSWITCH}?ain=${ain}&switchcmd=${cmd}&sid=${sid}")
 	echo "$result"
 }
 
@@ -179,7 +188,7 @@ has_list()
 	local sid="$2"
 	
 	local cmd="getswitchlist"
-	local list=$(curl "$url/${PATH_HOMEAUTOSWITCH}?switchcmd=${cmd}&sid=${sid}" 2> /dev/null)
+	local list=$(requestWebsite "$url/${PATH_HOMEAUTOSWITCH}?switchcmd=${cmd}&sid=${sid}")
 	echo "$list"
 }
 
@@ -355,7 +364,7 @@ fi
 
 if [[ $doLogout -ne 0 ]]
 then
-	#echo "LOGOUT" >&2
+	#	echo "LOGOUT" >&2
 	logout "$URL" $sid
 fi
 
