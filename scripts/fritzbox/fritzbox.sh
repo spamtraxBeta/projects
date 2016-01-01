@@ -56,7 +56,7 @@ logMessage()
 requestWebsite()
 {
 	local address="$1"
-	#echo "${address}" >&2
+	#echo "RW: ${address}" >&2
 	curl "${address}" 2> /dev/null
 }
 
@@ -143,8 +143,7 @@ login()
 logout()
 {
 	local url="$1"
-	#echo "LOGOUT: ${url}/${PATH_LOGIN}?logout=yes&sid=${sid}" >&2
-	local sid="$1"
+	local sid="$2"
 	
 	local sid=$(requestWebsite "${url}/${PATH_LOGIN}?logout=yes&sid=${sid}")
 }
@@ -364,7 +363,6 @@ fi
 
 if [[ $doLogout -ne 0 ]]
 then
-	#	echo "LOGOUT" >&2
 	logout "$URL" $sid
 fi
 
