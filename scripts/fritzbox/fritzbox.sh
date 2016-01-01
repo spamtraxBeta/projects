@@ -3,32 +3,74 @@
 # This script sends a login request to a AVM Fritz!Box
 # (or some other AVM devices) following the steps described in
 # http://avm.de/fileadmin/user_upload/Global/Service/Schnittstellen/AVM_Technical_Note_-_Session_ID.pdf
-# After that a list of all switches is requested and information about the
-# switches is printed to STDOUT
-# Please note that currently no error handling is implemented
 
-#################################
-# Configuration
-#################################
-USERNAME="dose"
-PASSWORD="123abc"
-URL="http://fritz.box"
+PATH_LOGIN="login_sid.lua"
+PATH_HOMEAUTOSWITCH="webservices/homeautoswitch.lua"
 
+printUsage()
+{
+	echo "This script interacts with a AVM switch (like"
+	echo "Fritz!Powerline 546e)"
+	echo "There are two modes. The simple one always"
+	echo "needs a username and password, the extended"
+	echo "requests a session id once which can be reused"
+	echo "for later calls which speeds things up."
+	echo ""
+	echo "Login (print session id SID to stdout):"
+	echo "	$0 -u USERNAME -p PASSWORD ADDRESS" 
+	echo ""
+	echo "Logout (makes SID requested above invalid):"
+	echo "	$0 -s SID ADDRESS"
+	echo ""
+	echo "List all devices (print AIN = id and some info)":
+	echo "	$0 -u USERNAME -p PASSWORD -l ADDRESS"
+	echo "	$0 -s SID -l ADDRESS"
+	echo ""
+	echo "Switch a device on (e = enable)"
+	echo "	$0 -u USERNAME -p PASSWORD -e AIN ADDRESS"
+	echo "	$0 -s SID -e AIN ADDRESS"
+	echo ""
+	echo "Switch a device off (d = disable)"
+	echo "	$0 -u USERNAME -p PASSWORD -d AIN ADDRESS"
+	echo "	$0 -s SID -d AIN ADDRESS"
+	echo ""
+	echo "Query state of a device"
+	echo "	$0 -u USERNAME -p PASSWORD -q AIN ADDRESS"
+	echo "	$0 -s SID -q AIN ADDRESS"
+	echo ""
+	echo "Note:"
+	echo "All calls with -s SID above logout automatically."
+	echo "To prevent logout add -n (=nologout) as additional parameter."
+	echo ""
+	echo "Other important note:"
+	echo "If username is empty pass it with empty string: -u \"\""
+}
 
-#################################
-# Some other config
-#################################
-URL_LOGIN="${URL}/login_sid.lua"
-URL_HOMEAUTOSWITCH="${URL}/webservices/homeautoswitch.lua"
+logMessage()
+{
+	local key="$1"
+	local message="$2"
+	#echo "$key = $message" >&2
+}
 
+runCommand()
+{
+	local cmd="$1"
+	local result=$(eval "$cmd")
+	logMessage "$cmd" "$result"
+	echo $result
+}
 
-#################################
-# Implementation
-#################################
 
 requestChallenge()
 {
-	local challenge=$(curl ${URL_LOGIN} 2> /dev/null | sed -r 's/.*<Challenge>(.*?)<\/Challenge>.*/\1/')
+	local url="$1"
+	local response=$(curl ${url}/${PATH_LOGIN} 2> /dev/null);
+	logMessage "requestChallenge_response" "$response"
+	
+	local challenge=$(echo "$response" | sed -r 's/.*<Challenge>(.*?)<\/Challenge>.*/\1/')
+	logMessage "requestChallenge_challenge" "$challenge"
+	
 	echo "$challenge"
 }
 
@@ -61,7 +103,6 @@ requestChallenge()
 # @param challenge
 # @param password
 # @return
-
 calculateResponse()
 {
 	local challenge="$1"
@@ -76,31 +117,44 @@ calculateResponse()
 	# sed -r 's/^\xfe\xff(.*)/\1/'			=> remove BOM (byte order mask)
 	# md5sum								=> calculate checksum
 	# awk '{print $1}')						=> remove stuff after checksum
-	local checkSum=$(printf "%s-%s" $challenge $password | iconv -f UTF8 -t UTF16LE | sed -r 's/^\xfe\xff(.*)/\1/' | md5sum | awk '{print $1}')
+	local checkSum=$(printf "%s-%s" $challenge $password | iconv -f UTF-8 -t UTF-16LE | sed -r 's/^\xfe\xff(.*)/\1/' | md5sum | awk '{print $1}')
 	
 	echo "${challenge}-${checkSum}"
 }
 
 login()
 {
-	local userName="$1"
-	local response="$2"
-	local sid=$(curl "${URL_LOGIN}?username=${userName}&response=${response}" 2> /dev/null | sed -r 's/.*<SID>(.*?)<\/SID>.*/\1/')
+	local url="$1"
+	local userName="$2"
+	local response="$3"
+	local sid=$(curl "${url}/${PATH_LOGIN}?username=${userName}&response=${response}" 2> /dev/null | sed -r 's/.*<SID>(.*?)<\/SID>.*/\1/')
 	echo "$sid"
 }
 
 logout()
 {
-	local sid="$1"	
-	local sid=$(curl "${URL_LOGIN}?logout=yes&sid=${sid}" 2> /dev/null)
+	local url="$1"
+	#echo "LOGOUT: ${url}/${PATH_LOGIN}?logout=yes&sid=${sid}" >&2
+	local sid="$1"
+	
+	local sid=$(curl "${url}/${PATH_LOGIN}?logout=yes&sid=${sid}" 2> /dev/null)
 }
 
 
 requestSID()
 {
-	local challenge=$(requestChallenge)
-	local response=$(calculateResponse "$challenge" "$PASSWORD");	
-	local sid=$(login "$USERNAME" "$response")
+	local url="$1"
+	local user="$2"
+	local pass="$3"
+	
+	local challenge=$(requestChallenge "$url")
+	logMessage "requestSID_challenge" "$challenge"
+	
+	local response=$(calculateResponse "$challenge" "$pass");
+	logMessage "requestSID_response" "$response"
+	
+	local sid=$(login "$url" "$user" "$response")
+	logMessage "requestSID_sid" "$sid"
 	
 	echo "$sid"
 }
@@ -109,39 +163,204 @@ requestSID()
 # http://avm.de/fileadmin/user_upload/Global/Service/Schnittstellen/AHA-HTTP-Interface.pdf
 has_exec()
 {
-	local sid="$1"
-	local ain="$2"
-	local cmd="$3"
+	local url="$1"
+	local sid="$2"
+	local ain="$3"
+	local cmd="$4"
 	
-	local result=$(curl "${URL_HOMEAUTOSWITCH}?ain=${ain}&switchcmd=${cmd}&sid=${sid}" 2> /dev/null)
+	local result=$(curl "${url}/${PATH_HOMEAUTOSWITCH}?ain=${ain}&switchcmd=${cmd}&sid=${sid}" 2> /dev/null)
 	echo "$result"
 }
 
 # http://avm.de/fileadmin/user_upload/Global/Service/Schnittstellen/AHA-HTTP-Interface.pdf
 has_list()
 {
-	local sid="$1"
+	local url="$1"
+	local sid="$2"
 	
 	local cmd="getswitchlist"
-	local list=$(curl "${URL_HOMEAUTOSWITCH}?switchcmd=${cmd}&sid=${sid}" 2> /dev/null)
+	local list=$(curl "$url/${PATH_HOMEAUTOSWITCH}?switchcmd=${cmd}&sid=${sid}" 2> /dev/null)
 	echo "$list"
 }
 
-sid=$(requestSID)
+user=""
+pass=""
+sid=""
+ain=""
+enable=0
+disable=0
+query=0
+URL=""
+doLogout=1
+list=0
 
-switchList=$(has_list $sid)
+while getopts ":u:p:s:nle:d:q:h" opt; do
+	case $opt in
+		u)
+			user=$OPTARG;
+		;;
+		
+		p)
+			pass=$OPTARG;
+		;;
+		
+		n)
+			doLogout=0
+		;;
+		
+		s)
+			sid=$OPTARG;
+		;;
+		
+		
+		e)
+			enable=1;
+			ain=$OPTARG;
+		;;
+		
+		d)
+			disable=1;
+			ain=$OPTARG;
+		;;
+		
+		l)
+			list=1
+		;;
+		
+		q)
+			query=1
+			ain=$OPTARG;
+		;;
+		
+		h)
+			printUsage
+			exit 0
+		;;
+		
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			printUsage >&2
+			exit 1
+		;;
+		
+		:)
+			echo "Missing argument for -$OPTARG" >&2
+			printUsage >&2
+			exit 1
+		;;
+	esac
+done
 
-while read ain
-do
-	name=$(has_exec	   "$sid" "$ain" "getswitchname")
-	state=$(has_exec   "$sid" "$ain" "getswitchstate")
-	present=$(has_exec "$sid" "$ain" "getswitchpresent")
-	power=$(has_exec   "$sid" "$ain" "getswitchpower")
-	echo "$ain - $name: state=$state; present=$present; power=$power"
-done < <(echo "$switchList")
+shift $(expr $OPTIND - 1 )
+
+if [ -z $1 ]
+then
+	echo "address missing" >&2
+	exit 1;
+fi
 
 
-logout $sid
+URL="http://$1"
+#URL_LOGIN="${URL}/login_sid.lua"
 
-exit 0
+
+
+
+if [[ -n $user && -n $pass && -n $sid ]]
+then
+	echo "Cannot handle username and password and sid" >&2
+	exit 1;
+fi
+
+if [[  -z $user && -z $pass ]] && [[ -z $sid ]]
+then
+	echo "Neither username/password nor sid specified" >&2
+	exit 1;
+fi
+
+if [[ -n $pass ]]
+then
+	sid=$(requestSID "$URL" "$user" "$pass")
+	if [[ $OPTIND -eq 5 ]]
+	then
+		# just username and password specified => print sid, prevent logout
+		doLogout=0
+		echo $sid
+	fi
+fi
+
+
+
+if [[ $list -ne 0 ]]
+then
+	switchList=$(has_list "$URL" $sid)
+	
+	while read ain
+	do
+		name=$(has_exec	   "$URL" "$sid" "$ain" "getswitchname")
+		state=$(has_exec   "$URL" "$sid" "$ain" "getswitchstate")
+		present=$(has_exec "$URL" "$sid" "$ain" "getswitchpresent")
+		power=$(has_exec   "$URL" "$sid" "$ain" "getswitchpower")
+		
+		echo "$ain - $name: state=$state; present=$present; power=$power"
+	done < <(echo "$switchList")
+fi
+
+# echo "user=$user"
+# echo "pass=$pass"
+# echo "sid=$sid"
+# echo "ain=$ain"
+# echo "enable=$enable"
+# echo "disable=$disable"
+# echo "query=$query"
+# echo "URL=$URL"
+# echo "doLogout=$doLogout"
+# echo "list=$list"
+
+
+if [[ $query -ne 0 ]]
+then
+	if [[ -z $ain ]]
+	then
+		echo "cannot query, no ain specified" >&2;
+		exit 1;
+	fi
+	
+	state=$(has_exec "$URL" "$sid" "$ain" "getswitchstate")
+	echo $state;
+fi
+
+
+if [[ $enable -ne 0 ]]
+then
+	if [[ -z $ain ]]
+	then
+		echo "cannot enable, no ain specified" >&2;
+		exit 1;
+	fi
+	
+	has_exec "$URL" "$sid"	"$ain" "setswitchon"
+fi
+
+if [[ $disable -ne 0 ]]
+then
+	if [[ -z $ain ]]
+	then
+		echo "cannot disable, no ain specified" >&2;
+		exit 1;
+	fi
+	
+	has_exec "$URL" "$sid"	"$ain" "setswitchoff"
+fi
+
+if [[ $doLogout -ne 0 ]]
+then
+	#echo "LOGOUT" >&2
+	logout "$URL" $sid
+fi
+
+
+exit 0;
+
+
 
