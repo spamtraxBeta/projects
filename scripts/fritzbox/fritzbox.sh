@@ -26,11 +26,11 @@ printUsage()
 	echo "	$0 -u USERNAME -p PASSWORD -l ADDRESS"
 	echo "	$0 -s SID -l ADDRESS"
 	echo ""
-	echo "Switch a device on (e = enable)"
-	echo "	$0 -u USERNAME -p PASSWORD -e AIN ADDRESS"
-	echo "	$0 -s SID -e AIN ADDRESS"
+	echo "Switch a device on (a = activate)"
+	echo "	$0 -u USERNAME -p PASSWORD -a AIN ADDRESS"
+	echo "	$0 -s SID -a AIN ADDRESS"
 	echo ""
-	echo "Switch a device off (d = disable)"
+	echo "Switch a device off (d = deactivate)"
 	echo "	$0 -u USERNAME -p PASSWORD -d AIN ADDRESS"
 	echo "	$0 -s SID -d AIN ADDRESS"
 	echo ""
@@ -202,7 +202,7 @@ URL=""
 doLogout=1
 list=0
 
-while getopts ":u:p:s:nle:d:q:h" opt; do
+while getopts ":u:p:s:nla:d:q:h" opt; do
 	case $opt in
 		u)
 			user=$OPTARG;
@@ -221,7 +221,7 @@ while getopts ":u:p:s:nle:d:q:h" opt; do
 		;;
 		
 		
-		e)
+		a)
 			enable=1;
 			ain=$OPTARG;
 		;;
