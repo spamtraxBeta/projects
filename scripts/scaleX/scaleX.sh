@@ -1,6 +1,42 @@
 #! /bin/bash
 
 ratio=$1
+file=$2
+
+PARALLEL=$(nproc)
+
+if [[ -z $file ]]
+then
+	find . -maxdepth 1 -iname '*.JPG' -print0 | xargs -0 -n 1 -P $PARALLEL -I {} "$0" "$ratio" "{}"
+else
+
+	scaledDir="scaled_${ratio}";
+
+	mkdir -p "${scaledDir}"
+
+	command="convert '${file}' -resize '${ratio}%' '${scaledDir}/${file}'"
+
+	echo $command
+	eval "$command"
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exit 0
+
+ratio=$1
 
 scaledDir="scaled_${ratio}";
 
@@ -14,7 +50,9 @@ onFile()
 {
     local file="$1"
     echo $file
-    convert "${file}" -resize "${ratio}%" "${scaledDir}/${file}"
+    command="convert '${file}' -resize '${ratio}%' '${scaledDir}/${file}'"
+	echo $command
+	eval "$command"
 }
 
 export -f onFile
